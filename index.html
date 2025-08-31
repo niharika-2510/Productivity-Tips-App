@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Tips Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f0f23;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(120, 219, 226, 0.3) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .app {
+            position: relative;
+            z-index: 1;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 32px 0;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tip-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .tip-text {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: #f1f5f9;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .tip-category {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #a78bfa;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tip-number {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: rgba(244, 114, 182, 0.2);
+            color: #f472b6;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .btn-container {
+            margin: 32px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateX(30px) scale(0.95);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app {
+                padding: 32px 24px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tip-text {
+                font-size: 1.1rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    
+    <div class="app">
+        <h1>⚡ ProTips</h1>
+        <p class="subtitle">Boost your productivity with expert advice</p>
+        
+        <div class="tip-card" id="tipCard">
+            <div class="tip-category" id="tipCategory">Welcome</div>
+            <div class="tip-number" id="tipNumber">🚀</div>
+            <div class="tip-text" id="tipText">
+                Ready to supercharge your productivity? Click below to discover proven strategies used by top performers worldwide.
+            </div>
+        </div>
+        
+        <div class="btn-container">
+            <button onclick="generateTip()" id="generateBtn">Discover Tip</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="tipCount">0</div>
+                <div class="stat-label">Tips Discovered</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="currentTip">—</div>
+                <div class="stat-label">Current Tip</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="totalTips">30</div>
+                <div class="stat-label">Total Available</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tips = [
+            { text: "Use the Pomodoro Technique: 25 minutes of focused work followed by 5-minute breaks to maintain peak concentration.", category: "Focus" },
+            { text: "Tackle your most challenging task first thing in the morning when your willpower is strongest.", category: "Priority" },
+            { text: "Follow the two-minute rule: if something takes less than 2 minutes, do it immediately.", category: "Efficiency" },
+            { text: "Time-block your calendar by assigning specific hours to different types of work.", category: "Planning" },
+            { text: "Use the 80/20 rule: identify the 20% of activities that generate 80% of your results.", category: "Focus" },
+            { text: "Batch similar tasks together to minimize context switching and maximize flow.", category: "Efficiency" },
+            { text: "Keep a clean, organized workspace to reduce distractions and improve mental clarity.", category: "Environment" },
+            { text: "Turn off all non-essential notifications during deep work sessions.", category: "Focus" },
+            { text: "Plan tomorrow's priorities before ending today's work.", category: "Planning" },
+            { text: "Use the 'getting things done' method: capture, clarify, organize, reflect, engage.", category: "System" },
+            { text: "Learn to say 'no' strategically to protect your time for high-impact activities.", category: "Boundaries" },
+            { text: "Take regular breaks to prevent mental fatigue and maintain sustained performance.", category: "Wellness" },
+            { text: "Set SMART goals: Specific, Measurable, Achievable, Relevant, Time-bound.", category: "Goals" },
+            { text: "Use keyboard shortcuts and automation tools to speed up repetitive tasks.", category: "Efficiency" },
+            { text: "Delegate tasks that others can do 80% as well as you in 20% of the time.", category: "Leadership" },
+            { text: "Create templates and checklists for recurring processes to ensure consistency.", category: "Systems" },
+            { text: "Practice single-tasking: give your full attention to one thing at a time.", category: "Focus" },
+            { text: "Establish morning and evening routines to bookend your day with intention.", category: "Habits" },
+            { text: "Use the Eisenhower Matrix: urgent/important quadrants to prioritize tasks.", category: "Priority" },
+            { text: "Minimize decision fatigue by automating or pre-deciding routine choices.", category: "Mental Energy" },
+            { text: "Keep a capture tool handy to externalize thoughts and prevent mental clutter.", category: "Organization" },
+            { text: "Review your progress weekly to identify what's working and what needs adjustment.", category: "Reflection" },
+            { text: "Optimize your energy by scheduling demanding work during your peak hours.", category: "Energy" },
+            { text: "Use the 'Swiss cheese' method: poke holes in large projects by doing small parts.", category: "Projects" },
+            { text: "Set artificial deadlines for yourself to create urgency and momentum.", category: "Motivation" },
+            { text: "Practice the art of deep work: long periods of focused, cognitively demanding activity.", category: "Focus" },
+            { text: "Maintain work-life boundaries by having clear start and stop rituals.", category: "Balance" },
+            { text: "Invest in your health: regular exercise, quality sleep, and good nutrition fuel productivity.", category: "Wellness" },
+            { text: "Learn continuously: dedicate time each week to developing new skills and knowledge.", category: "Growth" },
+            { text: "Use positive constraints: artificial limitations that force creative solutions and efficiency.", category: "Creativity" }
+        ];
+
+        let viewedTips = 0;
+        let lastTipIndex = -1;
+        let availableTips = [...Array(tips.length).keys()];
+
+        function generateTip() {
+            // Reset available tips if we've seen them all
+            if (availableTips.length === 0) {
+                availableTips = [...Array(tips.length).keys()];
+            }
+
+            // Remove last tip from available options to avoid immediate repeats
+            if (lastTipIndex !== -1) {
+                availableTips = availableTips.filter(index => index !== lastTipIndex);
+            }
+
+            // Select random tip from available ones
+            const randomIndex = Math.floor(Math.random() * availableTips.length);
+            const tipIndex = availableTips[randomIndex];
+            
+            // Remove this tip from available tips
+            availableTips.splice(randomIndex, 1);
+            lastTipIndex = tipIndex;
+            
+            viewedTips++;
+            
+            const tip = tips[tipIndex];
+            
+            // Update elements
+            const tipCard = document.getElementById('tipCard');
+            const tipText = document.getElementById('tipText');
+            const tipCategory = document.getElementById('tipCategory');
+            const tipNumber = document.getElementById('tipNumber');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Animation
+            tipCard.classList.remove('slide-in');
+            setTimeout(() => {
+                tipText.textContent = tip.text;
+                tipCategory.textContent = tip.category;
+                tipNumber.textContent = tipIndex + 1;
+                
+                // Update stats
+                document.getElementById('tipCount').textContent = viewedTips;
+                document.getElementById('currentTip').textContent = `${tipIndex + 1}/${tips.length}`;
+                
+                // Update button text
+                if (viewedTips === 1) {
+                    generateBtn.textContent = 'Next Tip';
+                }
+                
+                tipCard.classList.add('slide-in');
+            }, 150);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' || e.code === 'Enter') {
+                e.preventDefault();
+                generateTip();
+            }
+        });
+
+        // Auto-generate first tip after a moment
+        setTimeout(() => {
+            const welcome = document.getElementById('tipText');
+            welcome.style.opacity = '0.7';
+            welcome.innerHTML = 'Press <strong>Space</strong> or click below to start your productivity journey!';
+        }, 1000);
+    </script>
+</body>
+</html>
